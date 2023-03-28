@@ -16,7 +16,7 @@ $ go run main.go
 
 ### API Docs
 
-- JSON file at docs/swagger.json
+- docs/swagger.json
 
 ##### A API está disponível na porta 5000
  - http://localhost:5000/api/v1/...
@@ -26,9 +26,10 @@ $ go run main.go
 
 ##### O pgAdmin está disponível na porta 9000
 - http://localhost:9000
-- User: admin@admin.com
+- E-mail: admin@admin.com
 - Password: 123456
 
+##### As credenciais de acesso ao banco estão expostas na imagem abaixo
 ![](https://github.com/Trsouza/faculdade-pd/blob/main/imgs/pgAdmin.png)
 
 
