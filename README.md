@@ -30,10 +30,9 @@ $ go run main.go
 - Password: 123456
 
 ##### As credenciais de acesso ao banco estão expostas na imagem abaixo
-![](https://github.com/Trsouza/faculdade-pd/blob/main/imgs/pgAdmin.png)
+![](https://github.com/Trsouza/faculdade-pd/blob/main/imgs/pgAdmin_.png)
 
-
-#### Os filtros solicitados estão contidos nos controladores de **Aluno** e  **Disciplina**, de acordo com as imagens abaixo.
+#### Os filtros solicitados estão contidos nos controladores de **Aluno** e  **Disciplina**, de acordo com as imagens abaixo
 
 ![](https://github.com/Trsouza/faculdade-pd/blob/main/imgs/aluno.png)
 
