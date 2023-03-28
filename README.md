@@ -25,7 +25,7 @@ $ go run main.go
 - http://localhost:5000/swagger/index.html#/
 
 ##### O pgAdmin está disponível na porta 9000
-- http://localhost:900
+- http://localhost:9000
 - User: admin@admin.com
 - Password: 123456
 
