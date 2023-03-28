@@ -1,0 +1,947 @@
+basePath: /api/v1
+definitions:
+  models.Aluno:
+    properties:
+      cpf:
+        type: string
+      disciplina_matriculas:
+        items:
+          $ref: '#/definitions/models.DisciplinaMatricula'
+        type: array
+      nome:
+        type: string
+      unique_id:
+        type: integer
+    required:
+    - cpf
+    - nome
+    type: object
+  models.Curso:
+    properties:
+      curso_disciplinas:
+        items:
+          $ref: '#/definitions/models.CursoDisciplina'
+        type: array
+      faculdade:
+        $ref: '#/definitions/models.Faculdade'
+      faculdade_unique_id:
+        type: integer
+      nome:
+        type: string
+      unique_id:
+        type: integer
+    type: object
+  models.CursoDisciplina:
+    properties:
+      curso:
+        $ref: '#/definitions/models.Curso'
+      curso_unique_id:
+        type: integer
+      disciplina:
+        $ref: '#/definitions/models.Disciplina'
+      disciplina_matriculas:
+        items:
+          $ref: '#/definitions/models.DisciplinaMatricula'
+        type: array
+      disciplina_unique_id:
+        type: integer
+      unique_id:
+        type: integer
+    type: object
+  models.Disciplina:
+    properties:
+      curso_disciplinas:
+        items:
+          $ref: '#/definitions/models.CursoDisciplina'
+        type: array
+      nome:
+        type: string
+      professor:
+        $ref: '#/definitions/models.Professor'
+      professor_unique_id:
+        type: integer
+      unique_id:
+        type: integer
+    type: object
+  models.DisciplinaMatricula:
+    properties:
+      aluno:
+        $ref: '#/definitions/models.Aluno'
+      aluno_unique_id:
+        type: integer
+      curso_disciplina:
+        $ref: '#/definitions/models.CursoDisciplina'
+      curso_disciplina_unique_id:
+        type: integer
+      data_matricula:
+        type: string
+      unique_id:
+        type: integer
+    type: object
+  models.Faculdade:
+    properties:
+      cnpj:
+        type: string
+      cursos:
+        items:
+          $ref: '#/definitions/models.Curso'
+        type: array
+      nome:
+        type: string
+      unique_id:
+        type: integer
+    required:
+    - cnpj
+    - nome
+    type: object
+  models.Professor:
+    properties:
+      disciplinas:
+        items:
+          $ref: '#/definitions/models.Disciplina'
+        type: array
+      formacao:
+        type: string
+      nome:
+        type: string
+      unique_id:
+        type: integer
+    required:
+    - formacao
+    - nome
+    type: object
+host: localhost:5000
+info:
+  contact:
+    name: Tathiane Souza
+  description: Esta é a documentação API em Golang
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: API Faculdade passei direto
+  version: "1.0"
+paths:
+  /aluno:
+    get:
+      consumes:
+      - application/json
+      description: Busca todos os alunos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Busca todos os alunos
+      tags:
+      - Controller Aluno
+    post:
+      consumes:
+      - application/json
+      description: 'Cria um aluno, os campos que devem ser enviados são: nome e cpf'
+      parameters:
+      - description: aluno
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Aluno'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Cria um aluno
+      tags:
+      - Controller Aluno
+  /aluno/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta um aluno
+      parameters:
+      - description: UniqueID do aluno
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta um aluno
+      tags:
+      - Controller Aluno
+    get:
+      consumes:
+      - application/json
+      description: Busca aluno por id
+      parameters:
+      - description: UniqueID do aluno
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Busca aluno por id
+      tags:
+      - Controller Aluno
+    put:
+      consumes:
+      - application/json
+      description: 'Edita um aluno, os campos que devem ser enviados são: nome e cpf'
+      parameters:
+      - description: UniqueID do aluno
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: aluno
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Aluno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Edita um aluno
+      tags:
+      - Controller Aluno
+  /aluno/curso/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Realiza um filtro para obter todos os alunos de um curso
+      parameters:
+      - description: UniqueID do curso
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Filtra alunos por curso
+      tags:
+      - Controller Aluno
+  /aluno/disciplina/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Realiza um filtro para obter todos os alunos de uma disciplina
+      parameters:
+      - description: UniqueID do disciplina
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Filtra alunos por disciplina
+      tags:
+      - Controller Aluno
+  /aluno/faculdade/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Realiza um filtro para obter todos os alunos de uma faculdade
+      parameters:
+      - description: UniqueID da faculdade
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Filtra alunos por faculdade
+      tags:
+      - Controller Aluno
+  /aluno/total/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Realiza um filtro para obter o total de alunos de uma faculdade
+      parameters:
+      - description: UniqueID do faculdade
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Filtra o total de alunos de uma faculdade
+      tags:
+      - Controller Aluno
+  /curso:
+    get:
+      consumes:
+      - application/json
+      description: Busca todos os cursos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Curso'
+      summary: Buscar todos os cursos
+      tags:
+      - Controller Curso
+    post:
+      consumes:
+      - application/json
+      description: 'Cria um curso, os campos que devem ser enviados são: nome e "faculdade_unique_id'
+      parameters:
+      - description: curso
+        in: body
+        name: curso
+        required: true
+        schema:
+          $ref: '#/definitions/models.Curso'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Curso'
+      summary: Cria um curso
+      tags:
+      - Controller Curso
+  /curso-disciplina:
+    get:
+      consumes:
+      - application/json
+      description: Busca todos os cursoDisciplinas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CursoDisciplina'
+      summary: Buscar todos os cursoDisciplionas
+      tags:
+      - Controller CursoDisciplina
+    post:
+      consumes:
+      - application/json
+      description: Cria um cursoDisciplionas
+      parameters:
+      - description: cursoDiscipliona
+        in: body
+        name: cursoDiscipliona
+        required: true
+        schema:
+          $ref: '#/definitions/models.CursoDisciplina'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CursoDisciplina'
+      summary: Cria um cursoDisciplionas
+      tags:
+      - Controller CursoDisciplina
+  /curso-disciplina/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 'Deleta um cursoDiscipliona, os campos que devem ser enviados são:
+        curso_unique_id e "disciplina_unique_id'
+      parameters:
+      - description: UniqueID do cursoDiscipliona
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta um cursoDiscipliona
+      tags:
+      - Controller CursoDisciplina
+    get:
+      consumes:
+      - application/json
+      description: Busca cursoDisciplina por id
+      parameters:
+      - description: UniqueID do cursoDisciplina
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CursoDisciplina'
+      summary: Busca cursoDisciplina por id
+      tags:
+      - Controller CursoDisciplina
+    put:
+      consumes:
+      - application/json
+      description: 'Edita um cursoDiscipliona, os campos que devem ser enviados são:
+        curso_unique_id e "disciplina_unique_id'
+      parameters:
+      - description: UniqueID do cursoDiscipliona
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: cursoDiscipliona
+        in: body
+        name: cursoDiscipliona
+        required: true
+        schema:
+          $ref: '#/definitions/models.CursoDisciplina'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CursoDisciplina'
+      summary: Edita um cursoDiscipliona
+      tags:
+      - Controller CursoDisciplina
+  /curso/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta um curso
+      parameters:
+      - description: UniqueID do curso
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta um curso
+      tags:
+      - Controller Curso
+    get:
+      consumes:
+      - application/json
+      description: Busca curso por id
+      parameters:
+      - description: UniqueID do curso
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Curso'
+      summary: Busca curso por id
+      tags:
+      - Controller Curso
+    put:
+      consumes:
+      - application/json
+      description: 'Edita um curso, os campos que devem ser enviados são: nome e "faculdade_unique_id'
+      parameters:
+      - description: UniqueID do curso
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: curso
+        in: body
+        name: curso
+        required: true
+        schema:
+          $ref: '#/definitions/models.Curso'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Curso'
+      summary: Edita um curso
+      tags:
+      - Controller Curso
+  /disciplina:
+    get:
+      consumes:
+      - application/json
+      description: Busca todas as disciplinas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Disciplina'
+      summary: Buscar todas as disciplinas
+      tags:
+      - Controller Disciplina
+    post:
+      consumes:
+      - application/json
+      description: 'Cria uma disciplina, os campos que devem ser enviados são: nome
+        e professor_unique_id'
+      parameters:
+      - description: disciplina
+        in: body
+        name: disciplina
+        required: true
+        schema:
+          $ref: '#/definitions/models.Disciplina'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Disciplina'
+      summary: Cria uma disciplina
+      tags:
+      - Controller Disciplina
+  /disciplina-matricula:
+    get:
+      consumes:
+      - application/json
+      description: Busca todas as disciplinas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DisciplinaMatricula'
+      summary: Buscar todas as disciplinas
+      tags:
+      - Controller DisciplinaMatricula
+    post:
+      consumes:
+      - application/json
+      description: 'Cria uma disciplinaMatricula, os campos que devem ser enviados
+        são: aluno_unique_id e curso_disciplina_unique_id'
+      parameters:
+      - description: disciplinaMatricula
+        in: body
+        name: disciplinaMatricula
+        required: true
+        schema:
+          $ref: '#/definitions/models.DisciplinaMatricula'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.DisciplinaMatricula'
+      summary: Cria uma disciplinaMatricula
+      tags:
+      - Controller DisciplinaMatricula
+  /disciplina-matricula/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta uma disciplinaMatricula
+      parameters:
+      - description: UniqueID da disciplinaMatricula
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta uma disciplinaMatricula
+      tags:
+      - Controller DisciplinaMatricula
+    get:
+      consumes:
+      - application/json
+      description: Busca disciplinaMatricula por id
+      parameters:
+      - description: UniqueID do disciplinaMatricula
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DisciplinaMatricula'
+      summary: Busca disciplinaMatricula por id
+      tags:
+      - Controller DisciplinaMatricula
+    put:
+      consumes:
+      - application/json
+      description: 'Edita uma disciplinaMatricula, os campos que devem ser enviados
+        são: aluno_unique_id e curso_disciplina_unique_id'
+      parameters:
+      - description: UniqueID da disciplinaMatricula
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: disciplinaMatricula
+        in: body
+        name: disciplinaMatricula
+        required: true
+        schema:
+          $ref: '#/definitions/models.DisciplinaMatricula'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DisciplinaMatricula'
+      summary: Edita uma disciplinaMatricula
+      tags:
+      - Controller DisciplinaMatricula
+  /disciplina/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta uma disciplina
+      parameters:
+      - description: UniqueID da disciplina
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta uma disciplina
+      tags:
+      - Controller Disciplina
+    get:
+      consumes:
+      - application/json
+      description: Busca disciplina por id
+      parameters:
+      - description: UniqueID do disciplina
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Disciplina'
+      summary: Busca disciplina por id
+      tags:
+      - Controller Disciplina
+    put:
+      consumes:
+      - application/json
+      description: 'Edita uma disciplina, os campos que devem ser enviados são: nome
+        e professor_unique_id'
+      parameters:
+      - description: UniqueID da disciplina
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: disciplina
+        in: body
+        name: disciplina
+        required: true
+        schema:
+          $ref: '#/definitions/models.Disciplina'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Disciplina'
+      summary: Edita uma disciplina
+      tags:
+      - Controller Disciplina
+  /disciplina/aluno/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Realiza um filtro para obter quais disciplinas um determinado aluno
+        cursa
+      parameters:
+      - description: UniqueID do aluno
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Disciplina'
+      summary: Filtra disciplinas que um determinado aluno cursa
+      tags:
+      - Controller Disciplina
+  /faculdade:
+    get:
+      consumes:
+      - application/json
+      description: Busca todas as faculdades
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Faculdade'
+      summary: Buscar todas as faculdades
+      tags:
+      - Controller Faculdade
+    post:
+      consumes:
+      - application/json
+      description: 'Cria uma faculdade, os campos que devem ser enviados são: nome
+        e cnpj'
+      parameters:
+      - description: faculdade
+        in: body
+        name: faculdade
+        required: true
+        schema:
+          $ref: '#/definitions/models.Faculdade'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Faculdade'
+      summary: Cria uma faculdade
+      tags:
+      - Controller Faculdade
+  /faculdade/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta uma faculdade
+      parameters:
+      - description: UniqueID da faculdade
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta uma faculdade
+      tags:
+      - Controller Faculdade
+    get:
+      consumes:
+      - application/json
+      description: Busca faculdade por id
+      parameters:
+      - description: UniqueID do faculdade
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Faculdade'
+      summary: Busca faculdade por id
+      tags:
+      - Controller Faculdade
+    put:
+      consumes:
+      - application/json
+      description: 'Edita uma faculdade, os campos que devem ser enviados são: nome
+        e cnpj'
+      parameters:
+      - description: UniqueID da faculdade
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: faculdade
+        in: body
+        name: faculdade
+        required: true
+        schema:
+          $ref: '#/definitions/models.Faculdade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Faculdade'
+      summary: Edita uma faculdade
+      tags:
+      - Controller Faculdade
+  /professor:
+    get:
+      consumes:
+      - application/json
+      description: Busca todos os professors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Buscar todos os professors
+      tags:
+      - Controller Professor
+    post:
+      consumes:
+      - application/json
+      description: 'Cria um professor, os campos que devem ser enviados são: nome
+        e formacao'
+      parameters:
+      - description: professor
+        in: body
+        name: professor
+        required: true
+        schema:
+          $ref: '#/definitions/models.Professor'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Cria um professor
+      tags:
+      - Controller Professor
+  /professor/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta um professor
+      parameters:
+      - description: UniqueID do professor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deleta um professor
+      tags:
+      - Controller Professor
+    get:
+      consumes:
+      - application/json
+      description: Busca professor por id
+      parameters:
+      - description: UniqueID do professor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Busca professor por id
+      tags:
+      - Controller Professor
+    put:
+      consumes:
+      - application/json
+      description: 'Edita um professor, os campos que devem ser enviados são: nome
+        e formacao'
+      parameters:
+      - description: UniqueID do professor
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: professor
+        in: body
+        name: professor
+        required: true
+        schema:
+          $ref: '#/definitions/models.Professor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Edita um professor
+      tags:
+      - Controller Professor
+swagger: "2.0"
