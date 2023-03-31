@@ -14,7 +14,7 @@ func RunMigrations(db *gorm.DB) {
 	db.AutoMigrate(models.DisciplinaMatricula{})
 	db.AutoMigrate(models.CursoDisciplina{})
 
-	Seed(db)
+	// Seed(db)
 }
 
 
@@ -61,7 +61,7 @@ func Seed(db *gorm.DB) {
 
 	var curso1, curso2, curso3 models.Curso
 
-	db.First(&curso1, "Nome = ? Curso 1")
+	db.First(&curso1, nome, "Curso 1")
 	db.First(&curso2, nome, "Curso 2")
 	db.First(&curso3, nome, "Curso 3")
 

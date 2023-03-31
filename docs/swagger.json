@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Esta é a documentação API em Golang",
-        "title": "API Faculdade passei direto",
+        "description": "Documentação API construída em Golang",
+        "title": "API Faculdade PD",
         "contact": {
             "name": "Tathiane Souza"
         },

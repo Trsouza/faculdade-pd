@@ -1613,8 +1613,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:5000",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "API Faculdade passei direto",
-	Description:      "Esta é a documentação API em Golang",
+	Title:            "API Faculdade PD",
+	Description:      "Documentação API construída em Golang",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

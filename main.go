@@ -7,9 +7,9 @@ import (
 	_ "github.com/trsouza/faculdade-pd/docs"
 )
 
-// @title API Faculdade passei direto
+// @title API Faculdade PD
 // @version 1.0
-// @description Esta é a documentação API em Golang
+// @description Documentação da API construída em Golang
 // @contact.name Tathiane Souza
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
