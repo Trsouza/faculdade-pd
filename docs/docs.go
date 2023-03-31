@@ -63,7 +63,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Aluno"
+                            "$ref": "#/definitions/dtos.AlunoCreateDTO"
                         }
                     }
                 ],
@@ -237,7 +237,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita um aluno, os campos que devem ser enviados são: nome e cpf",
+                "description": "Edita um aluno, os campos que podem ser enviados são: nome e cpf",
                 "consumes": [
                     "application/json"
                 ],
@@ -262,7 +262,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Aluno"
+                            "$ref": "#/definitions/dtos.AlunoUpdateDTO"
                         }
                     }
                 ],
@@ -344,7 +344,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Curso"
+                            "$ref": "#/definitions/dtos.CursoCreateDTO"
                         }
                     }
                 ],
@@ -399,7 +399,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CursoDisciplina"
+                            "$ref": "#/definitions/dtos.CursoDisciplinaCreateDTO"
                         }
                     }
                 ],
@@ -445,7 +445,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita um cursoDiscipliona, os campos que devem ser enviados são: curso_unique_id e \"disciplina_unique_id",
+                "description": "Edita um cursoDiscipliona, os campos que podem ser enviados são: curso_unique_id e \"disciplina_unique_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -470,7 +470,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CursoDisciplina"
+                            "$ref": "#/definitions/dtos.CursoDisciplinaUpdateDTO"
                         }
                     }
                 ],
@@ -543,7 +543,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita um curso, os campos que devem ser enviados são: nome e \"faculdade_unique_id",
+                "description": "Edita um curso, os campos que podem ser enviados são: nome e \"faculdade_unique_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -568,7 +568,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Curso"
+                            "$ref": "#/definitions/dtos.CursoUpdateDTO"
                         }
                     }
                 ],
@@ -650,7 +650,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Disciplina"
+                            "$ref": "#/definitions/dtos.DisciplinaCreateDTO"
                         }
                     }
                 ],
@@ -705,7 +705,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.DisciplinaMatricula"
+                            "$ref": "#/definitions/dtos.DisciplinaMatriculaCreateDTO"
                         }
                     }
                 ],
@@ -751,7 +751,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita uma disciplinaMatricula, os campos que devem ser enviados são: aluno_unique_id e curso_disciplina_unique_id",
+                "description": "Edita uma disciplinaMatricula, os campos que podem ser enviados são: aluno_unique_id e curso_disciplina_unique_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -776,7 +776,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.DisciplinaMatricula"
+                            "$ref": "#/definitions/dtos.DisciplinaMatriculaUpdateDTO"
                         }
                     }
                 ],
@@ -881,7 +881,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita uma disciplina, os campos que devem ser enviados são: nome e professor_unique_id",
+                "description": "Edita uma disciplina, os campos que podem ser enviados são: nome e professor_unique_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -906,7 +906,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Disciplina"
+                            "$ref": "#/definitions/dtos.DisciplinaUpdateDTO"
                         }
                     }
                 ],
@@ -988,7 +988,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Faculdade"
+                            "$ref": "#/definitions/dtos.FaculdadeCreateDTO"
                         }
                     }
                 ],
@@ -1059,7 +1059,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Faculdade"
+                            "$ref": "#/definitions/dtos.FaculdadeUpdateDTO"
                         }
                     }
                 ],
@@ -1141,7 +1141,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Professor"
+                            "$ref": "#/definitions/dtos.ProfessorCreateDTO"
                         }
                     }
                 ],
@@ -1187,7 +1187,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Edita um professor, os campos que devem ser enviados são: nome e formacao",
+                "description": "Edita um professor, os campos que podem ser enviados são: nome e formacao",
                 "consumes": [
                     "application/json"
                 ],
@@ -1212,7 +1212,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Professor"
+                            "$ref": "#/definitions/dtos.ProfessorUpdateDTO"
                         }
                     }
                 ],
@@ -1255,6 +1255,188 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dtos.AlunoCreateDTO": {
+            "type": "object",
+            "required": [
+                "cpf",
+                "nome"
+            ],
+            "properties": {
+                "cpf": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.AlunoUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "cpf": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.CursoCreateDTO": {
+            "type": "object",
+            "required": [
+                "faculdade_unique_id",
+                "nome"
+            ],
+            "properties": {
+                "faculdade_unique_id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.CursoDisciplinaCreateDTO": {
+            "type": "object",
+            "required": [
+                "curso_unique_id",
+                "disciplina_unique_id"
+            ],
+            "properties": {
+                "curso_unique_id": {
+                    "type": "integer"
+                },
+                "disciplina_unique_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.CursoDisciplinaUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "curso_unique_id": {
+                    "type": "integer"
+                },
+                "disciplina_unique_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.CursoUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "faculdade_unique_id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.DisciplinaCreateDTO": {
+            "type": "object",
+            "required": [
+                "nome",
+                "professor_unique_id"
+            ],
+            "properties": {
+                "nome": {
+                    "type": "string"
+                },
+                "professor_unique_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.DisciplinaMatriculaCreateDTO": {
+            "type": "object",
+            "required": [
+                "aluno_unique_id",
+                "curso_disciplina_unique_i"
+            ],
+            "properties": {
+                "aluno_unique_id": {
+                    "type": "integer"
+                },
+                "curso_disciplina_unique_i": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.DisciplinaMatriculaUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "aluno_unique_id": {
+                    "type": "integer"
+                },
+                "curso_disciplina_unique_i": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.DisciplinaUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "nome": {
+                    "type": "string"
+                },
+                "professor_unique_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dtos.FaculdadeCreateDTO": {
+            "type": "object",
+            "required": [
+                "cnpj",
+                "nome"
+            ],
+            "properties": {
+                "cnpj": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.FaculdadeUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "cnpj": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.ProfessorCreateDTO": {
+            "type": "object",
+            "required": [
+                "formacao",
+                "nome"
+            ],
+            "properties": {
+                "formacao": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.ProfessorUpdateDTO": {
+            "type": "object",
+            "properties": {
+                "formacao": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Aluno": {
             "type": "object",
             "required": [

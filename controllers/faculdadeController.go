@@ -7,6 +7,7 @@ import (
 	"github.com/klassmann/cpfcnpj"
 	"github.com/trsouza/faculdade-pd/database"
 	"github.com/trsouza/faculdade-pd/models"
+	"github.com/trsouza/faculdade-pd/dtos"
 )
 
 // @Summary Busca faculdade por id
@@ -68,11 +69,11 @@ func BuscarFaculdades(c *gin.Context) {
 // @Tags Controller Faculdade
 // @Accept json
 // @Produce json
-// @Param faculdade body models.Faculdade true "faculdade"
+// @Param faculdade body dtos.FaculdadeCreateDTO true "faculdade"
 // @Success 201 {object} models.Faculdade
 // @Router /faculdade [POST]
 func CriarFaculdade(c *gin.Context) {
-	var faculdade models.Faculdade
+	var faculdade dtos.FaculdadeCreateDTO
 	db := database.GetDatabase()
 
 	err := c.ShouldBindJSON(&faculdade)
@@ -82,15 +83,6 @@ func CriarFaculdade(c *gin.Context) {
 		})
 		return
 	}
-
-	faculdade.Cnpj = cpfcnpj.Clean(faculdade.Cnpj)
-	resultadoValidador := cpfcnpj.ValidateCNPJ(faculdade.Cnpj)
-    if !resultadoValidador {
-		c.JSON(400, gin.H{
-			"erro": "cnpj inválido",
-		})
-		return
-    }
 
 	validate := validator.New()
 
@@ -102,7 +94,22 @@ func CriarFaculdade(c *gin.Context) {
 		return
     }
 
-	err = db.Create(&faculdade).Error
+	
+	faculdade.Cnpj = cpfcnpj.Clean(faculdade.Cnpj)
+	resultadoValidador := cpfcnpj.ValidateCNPJ(faculdade.Cnpj)
+    if !resultadoValidador {
+		c.JSON(400, gin.H{
+			"erro": "cnpj inválido",
+		})
+		return
+    }
+
+	novaFaculdade := models.Faculdade{
+		Nome: faculdade.Nome,
+		Cnpj:  faculdade.Cnpj,
+	}
+
+	err = db.Create(&novaFaculdade).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível salvar a faculdade: " + err.Error(),
@@ -110,7 +117,7 @@ func CriarFaculdade(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, faculdade)
+	c.JSON(201, novaFaculdade)
 }
 
 // @Summary Deleta uma faculdade
@@ -160,11 +167,12 @@ func DeletarFaculdade(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "UniqueID da faculdade"
-// @Param faculdade body models.Faculdade true "faculdade"
+// @Param faculdade body dtos.FaculdadeUpdateDTO true "faculdade"
 // @Success 200 {object} models.Faculdade
 // @Router /faculdade/{id} [PUT]
 func EditarFaculdade(c *gin.Context) {
-	var faculdade models.Faculdade
+	var faculdade dtos.FaculdadeUpdateDTO
+	var novaFaculdade models.Faculdade
 	db := database.GetDatabase()
 	id := c.Param("id")
 
@@ -176,7 +184,7 @@ func EditarFaculdade(c *gin.Context) {
 		return
 	}
 
-	err = db.First(&faculdade, newid).Error
+	err = db.First(&novaFaculdade, newid).Error
 	if err != nil {
 		c.JSON(404, gin.H{
 			"erro": "Faculdade não encontrada: " + err.Error(),
@@ -192,26 +200,21 @@ func EditarFaculdade(c *gin.Context) {
 		return
 	}
 
-	faculdade.Cnpj = cpfcnpj.Clean(faculdade.Cnpj)
-	resultadoValidador := cpfcnpj.ValidateCNPJ(faculdade.Cnpj)
-    if !resultadoValidador {
-		c.JSON(400, gin.H{
-			"erro": "cnpj inválido",
-		})
-		return
-    }
+	if faculdade.Cnpj != "" {
+		faculdade.Cnpj = cpfcnpj.Clean(faculdade.Cnpj)
+		resultadoValidador := cpfcnpj.ValidateCNPJ(faculdade.Cnpj)
+		if !resultadoValidador {
+			c.JSON(400, gin.H{
+				"erro": "cnpj inválido",
+			})
+			return
+		}
+	}
 
-	validate := validator.New()
+	if faculdade.Nome != "" {  novaFaculdade.Nome = faculdade.Nome  }
+	if faculdade.Cnpj != "" {  novaFaculdade.Cnpj = faculdade.Cnpj  }
 
-    err = validate.Struct(faculdade)
-    if err != nil {
-        c.JSON(400, gin.H{
-			"erro": "objeto inválido: " + err.Error(),
-		})
-		return
-    }
-
-	err = db.Save(&faculdade).Error
+	err = db.Save(&novaFaculdade).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível editar a faculdade: " + err.Error(),
@@ -219,6 +222,6 @@ func EditarFaculdade(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, faculdade)
+	c.JSON(200, novaFaculdade)
 }
 

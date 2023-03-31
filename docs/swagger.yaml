@@ -1,5 +1,124 @@
 basePath: /api/v1
 definitions:
+  dtos.AlunoCreateDTO:
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+    required:
+    - cpf
+    - nome
+    type: object
+  dtos.AlunoUpdateDTO:
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+    type: object
+  dtos.CursoCreateDTO:
+    properties:
+      faculdade_unique_id:
+        type: integer
+      nome:
+        type: string
+    required:
+    - faculdade_unique_id
+    - nome
+    type: object
+  dtos.CursoDisciplinaCreateDTO:
+    properties:
+      curso_unique_id:
+        type: integer
+      disciplina_unique_id:
+        type: integer
+    required:
+    - curso_unique_id
+    - disciplina_unique_id
+    type: object
+  dtos.CursoDisciplinaUpdateDTO:
+    properties:
+      curso_unique_id:
+        type: integer
+      disciplina_unique_id:
+        type: integer
+    type: object
+  dtos.CursoUpdateDTO:
+    properties:
+      faculdade_unique_id:
+        type: integer
+      nome:
+        type: string
+    type: object
+  dtos.DisciplinaCreateDTO:
+    properties:
+      nome:
+        type: string
+      professor_unique_id:
+        type: integer
+    required:
+    - nome
+    - professor_unique_id
+    type: object
+  dtos.DisciplinaMatriculaCreateDTO:
+    properties:
+      aluno_unique_id:
+        type: integer
+      curso_disciplina_unique_i:
+        type: integer
+    required:
+    - aluno_unique_id
+    - curso_disciplina_unique_i
+    type: object
+  dtos.DisciplinaMatriculaUpdateDTO:
+    properties:
+      aluno_unique_id:
+        type: integer
+      curso_disciplina_unique_i:
+        type: integer
+    type: object
+  dtos.DisciplinaUpdateDTO:
+    properties:
+      nome:
+        type: string
+      professor_unique_id:
+        type: integer
+    type: object
+  dtos.FaculdadeCreateDTO:
+    properties:
+      cnpj:
+        type: string
+      nome:
+        type: string
+    required:
+    - cnpj
+    - nome
+    type: object
+  dtos.FaculdadeUpdateDTO:
+    properties:
+      cnpj:
+        type: string
+      nome:
+        type: string
+    type: object
+  dtos.ProfessorCreateDTO:
+    properties:
+      formacao:
+        type: string
+      nome:
+        type: string
+    required:
+    - formacao
+    - nome
+    type: object
+  dtos.ProfessorUpdateDTO:
+    properties:
+      formacao:
+        type: string
+      nome:
+        type: string
+    type: object
   models.Aluno:
     properties:
       cpf:
@@ -146,7 +265,7 @@ paths:
         name: aluno
         required: true
         schema:
-          $ref: '#/definitions/models.Aluno'
+          $ref: '#/definitions/dtos.AlunoCreateDTO'
       produces:
       - application/json
       responses:
@@ -199,7 +318,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita um aluno, os campos que devem ser enviados são: nome e cpf'
+      description: 'Edita um aluno, os campos que podem ser enviados são: nome e cpf'
       parameters:
       - description: UniqueID do aluno
         in: path
@@ -211,7 +330,7 @@ paths:
         name: aluno
         required: true
         schema:
-          $ref: '#/definitions/models.Aluno'
+          $ref: '#/definitions/dtos.AlunoUpdateDTO'
       produces:
       - application/json
       responses:
@@ -331,7 +450,7 @@ paths:
         name: curso
         required: true
         schema:
-          $ref: '#/definitions/models.Curso'
+          $ref: '#/definitions/dtos.CursoCreateDTO'
       produces:
       - application/json
       responses:
@@ -367,7 +486,7 @@ paths:
         name: cursoDiscipliona
         required: true
         schema:
-          $ref: '#/definitions/models.CursoDisciplina'
+          $ref: '#/definitions/dtos.CursoDisciplinaCreateDTO'
       produces:
       - application/json
       responses:
@@ -421,7 +540,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita um cursoDiscipliona, os campos que devem ser enviados são:
+      description: 'Edita um cursoDiscipliona, os campos que podem ser enviados são:
         curso_unique_id e "disciplina_unique_id'
       parameters:
       - description: UniqueID do cursoDiscipliona
@@ -434,7 +553,7 @@ paths:
         name: cursoDiscipliona
         required: true
         schema:
-          $ref: '#/definitions/models.CursoDisciplina'
+          $ref: '#/definitions/dtos.CursoDisciplinaUpdateDTO'
       produces:
       - application/json
       responses:
@@ -487,7 +606,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita um curso, os campos que devem ser enviados são: nome e "faculdade_unique_id'
+      description: 'Edita um curso, os campos que podem ser enviados são: nome e "faculdade_unique_id'
       parameters:
       - description: UniqueID do curso
         in: path
@@ -499,7 +618,7 @@ paths:
         name: curso
         required: true
         schema:
-          $ref: '#/definitions/models.Curso'
+          $ref: '#/definitions/dtos.CursoUpdateDTO'
       produces:
       - application/json
       responses:
@@ -536,7 +655,7 @@ paths:
         name: disciplina
         required: true
         schema:
-          $ref: '#/definitions/models.Disciplina'
+          $ref: '#/definitions/dtos.DisciplinaCreateDTO'
       produces:
       - application/json
       responses:
@@ -573,7 +692,7 @@ paths:
         name: disciplinaMatricula
         required: true
         schema:
-          $ref: '#/definitions/models.DisciplinaMatricula'
+          $ref: '#/definitions/dtos.DisciplinaMatriculaCreateDTO'
       produces:
       - application/json
       responses:
@@ -626,7 +745,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita uma disciplinaMatricula, os campos que devem ser enviados
+      description: 'Edita uma disciplinaMatricula, os campos que podem ser enviados
         são: aluno_unique_id e curso_disciplina_unique_id'
       parameters:
       - description: UniqueID da disciplinaMatricula
@@ -639,7 +758,7 @@ paths:
         name: disciplinaMatricula
         required: true
         schema:
-          $ref: '#/definitions/models.DisciplinaMatricula'
+          $ref: '#/definitions/dtos.DisciplinaMatriculaUpdateDTO'
       produces:
       - application/json
       responses:
@@ -692,7 +811,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita uma disciplina, os campos que devem ser enviados são: nome
+      description: 'Edita uma disciplina, os campos que podem ser enviados são: nome
         e professor_unique_id'
       parameters:
       - description: UniqueID da disciplina
@@ -705,7 +824,7 @@ paths:
         name: disciplina
         required: true
         schema:
-          $ref: '#/definitions/models.Disciplina'
+          $ref: '#/definitions/dtos.DisciplinaUpdateDTO'
       produces:
       - application/json
       responses:
@@ -764,7 +883,7 @@ paths:
         name: faculdade
         required: true
         schema:
-          $ref: '#/definitions/models.Faculdade'
+          $ref: '#/definitions/dtos.FaculdadeCreateDTO'
       produces:
       - application/json
       responses:
@@ -830,7 +949,7 @@ paths:
         name: faculdade
         required: true
         schema:
-          $ref: '#/definitions/models.Faculdade'
+          $ref: '#/definitions/dtos.FaculdadeUpdateDTO'
       produces:
       - application/json
       responses:
@@ -867,7 +986,7 @@ paths:
         name: professor
         required: true
         schema:
-          $ref: '#/definitions/models.Professor'
+          $ref: '#/definitions/dtos.ProfessorCreateDTO'
       produces:
       - application/json
       responses:
@@ -920,7 +1039,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'Edita um professor, os campos que devem ser enviados são: nome
+      description: 'Edita um professor, os campos que podem ser enviados são: nome
         e formacao'
       parameters:
       - description: UniqueID do professor
@@ -933,7 +1052,7 @@ paths:
         name: professor
         required: true
         schema:
-          $ref: '#/definitions/models.Professor'
+          $ref: '#/definitions/dtos.ProfessorUpdateDTO'
       produces:
       - application/json
       responses:

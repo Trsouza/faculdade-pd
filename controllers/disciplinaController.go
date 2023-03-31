@@ -3,8 +3,10 @@ package controllers
 import (
 	"strconv"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/trsouza/faculdade-pd/database"
 	"github.com/trsouza/faculdade-pd/models"
+	"github.com/trsouza/faculdade-pd/dtos"
 )
 
 // @Summary Filtra disciplinas que um determinado aluno cursa
@@ -107,11 +109,11 @@ func BuscarDisciplinas(c *gin.Context) {
 // @Tags Controller Disciplina
 // @Accept json
 // @Produce json
-// @Param disciplina body models.Disciplina true "disciplina"
+// @Param disciplina body dtos.DisciplinaCreateDTO true "disciplina"
 // @Success 201 {object} models.Disciplina
 // @Router /disciplina [POST]
 func CriarDisciplina(c *gin.Context) {
-	var disciplina models.Disciplina
+	var disciplina dtos.DisciplinaCreateDTO
 	db := database.GetDatabase()
 
 	err := c.ShouldBindJSON(&disciplina)
@@ -122,7 +124,22 @@ func CriarDisciplina(c *gin.Context) {
 		return
 	}
 
-	err = db.Create(&disciplina).Error
+	validate := validator.New()
+
+    err = validate.Struct(disciplina)
+    if err != nil {
+        c.JSON(400, gin.H{
+			"erro": "objeto inválido: " + err.Error(),
+		})
+		return
+    }
+
+	novaDisciplina := models.Disciplina{
+		Nome: disciplina.Nome,
+		ProfessorUniqueID: disciplina.ProfessorUniqueID,
+	}
+
+	err = db.Create(&novaDisciplina).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível salvar a disciplina: " + err.Error(),
@@ -130,7 +147,7 @@ func CriarDisciplina(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, disciplina)
+	c.JSON(201, novaDisciplina)
 }
 
 // @Summary Deleta uma disciplina
@@ -175,16 +192,17 @@ func DeletarDisciplina(c *gin.Context) {
 }
 
 // @Summary Edita uma disciplina
-// @Description Edita uma disciplina, os campos que devem ser enviados são: nome e professor_unique_id
+// @Description Edita uma disciplina, os campos que podem ser enviados são: nome e professor_unique_id
 // @Tags Controller Disciplina
 // @Accept json
 // @Produce json
 // @Param id path int true "UniqueID da disciplina"
-// @Param disciplina body models.Disciplina true "disciplina"
+// @Param disciplina body dtos.DisciplinaUpdateDTO true "disciplina"
 // @Success 200 {object} models.Disciplina
 // @Router /disciplina/{id} [PUT]
 func EditarDisciplina(c *gin.Context) {
-	var disciplina models.Disciplina
+	var disciplina dtos.DisciplinaUpdateDTO
+	var novaDisciplina models.Disciplina
 	db := database.GetDatabase()
 	id := c.Param("id")
 
@@ -196,7 +214,7 @@ func EditarDisciplina(c *gin.Context) {
 		return
 	}
 
-	err = db.First(&disciplina, newid).Error
+	err = db.First(&novaDisciplina, newid).Error
 	if err != nil {
 		c.JSON(404, gin.H{
 			"erro": "Disciplina não encontrada: " + err.Error(),
@@ -212,7 +230,10 @@ func EditarDisciplina(c *gin.Context) {
 		return
 	}
 
-	err = db.Save(&disciplina).Error
+	if disciplina.Nome != "" {  novaDisciplina.Nome = disciplina.Nome  }
+	if disciplina.ProfessorUniqueID > 0 {  novaDisciplina.ProfessorUniqueID = disciplina.ProfessorUniqueID  }
+
+	err = db.Save(&novaDisciplina).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível editar a disciplina: " + err.Error(),
@@ -220,6 +241,6 @@ func EditarDisciplina(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, disciplina)
+	c.JSON(200, novaDisciplina)
 }
 

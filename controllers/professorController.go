@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/trsouza/faculdade-pd/database"
 	"github.com/trsouza/faculdade-pd/models"
+	"github.com/trsouza/faculdade-pd/dtos"
 )
 
 // @Summary Busca professor por id
@@ -67,11 +68,11 @@ func BuscarProfessores(c *gin.Context) {
 // @Tags Controller Professor
 // @Accept json
 // @Produce json
-// @Param professor body models.Professor true "professor"
+// @Param professor body dtos.ProfessorCreateDTO true "professor"
 // @Success 201 {object} models.Professor
 // @Router /professor [POST]
 func CriarProfessor(c *gin.Context) {
-	var professor models.Professor
+	var professor dtos.ProfessorCreateDTO
 	db := database.GetDatabase()
 
 	err := c.ShouldBindJSON(&professor)
@@ -92,7 +93,12 @@ func CriarProfessor(c *gin.Context) {
 		return
     }
 
-	err = db.Create(&professor).Error
+	novoProfessor := models.Professor{
+		Nome: professor.Nome,
+		Formacao: professor.Formacao,
+	}
+
+	err = db.Create(&novoProfessor).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível salvar o professor: " + err.Error(),
@@ -100,7 +106,7 @@ func CriarProfessor(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, professor)
+	c.JSON(201, novoProfessor)
 }
 
 // @Summary Deleta um professor
@@ -144,16 +150,17 @@ func DeletarProfessor(c *gin.Context) {
 }
 
 // @Summary Edita um professor
-// @Description Edita um professor, os campos que devem ser enviados são: nome e formacao
+// @Description Edita um professor, os campos que podem ser enviados são: nome e formacao
 // @Tags Controller Professor
 // @Accept json
 // @Produce json
 // @Param id path int true "UniqueID do professor"
-// @Param professor body models.Professor true "professor"
+// @Param professor body dtos.ProfessorUpdateDTO true "professor"
 // @Success 200 {object} models.Professor
 // @Router /professor/{id} [PUT]
 func EditarProfessor(c *gin.Context) {
-	var professor models.Professor
+	var professor dtos.ProfessorUpdateDTO
+	var novoProfessor models.Professor
 	db := database.GetDatabase()
 	id := c.Param("id")
 	
@@ -165,7 +172,7 @@ func EditarProfessor(c *gin.Context) {
 		return
 	}
 
-	err = db.First(&professor, newid).Error
+	err = db.First(&novoProfessor, newid).Error
 	if err != nil {
 		c.JSON(404, gin.H{
 			"erro": "Professor não encontrado: " + err.Error(),
@@ -191,7 +198,10 @@ func EditarProfessor(c *gin.Context) {
 		return
     }
 
-	err = db.Save(&professor).Error
+	if professor.Nome != "" {  novoProfessor.Nome = professor.Nome  }
+	if professor.Formacao != "" {  novoProfessor.Formacao = professor.Formacao  }
+
+	err = db.Save(&novoProfessor).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível editar o professor: " + err.Error(),
@@ -199,6 +209,6 @@ func EditarProfessor(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, professor)
+	c.JSON(200, novoProfessor)
 }
 

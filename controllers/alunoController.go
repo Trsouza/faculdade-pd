@@ -7,6 +7,7 @@ import (
 	"github.com/klassmann/cpfcnpj"
 	"github.com/trsouza/faculdade-pd/database"
 	"github.com/trsouza/faculdade-pd/models"
+	"github.com/trsouza/faculdade-pd/dtos"
 )
 
 // @Summary Filtra alunos por curso
@@ -234,11 +235,11 @@ func BuscarAlunos(c *gin.Context) {
 // @Tags Controller Aluno
 // @Accept json
 // @Produce json
-// @Param aluno body models.Aluno true "aluno"
+// @Param aluno body dtos.AlunoCreateDTO true "aluno"
 // @Success 201 {object} models.Aluno
 // @Router /aluno [POST]
 func CriarAluno(c *gin.Context) {
-	var aluno models.Aluno
+	var aluno dtos.AlunoCreateDTO
 	db := database.GetDatabase()
 
 	err := c.ShouldBindJSON(&aluno)
@@ -248,15 +249,6 @@ func CriarAluno(c *gin.Context) {
 		})
 		return
 	}
-
-	aluno.Cpf = cpfcnpj.Clean(aluno.Cpf)
-	resultadoValidador := cpfcnpj.ValidateCPF(aluno.Cpf)
-    if !resultadoValidador {
-		c.JSON(400, gin.H{
-			"erro": "cpf inválido",
-		})
-		return
-    }
 
 	validate := validator.New()
 
@@ -268,7 +260,21 @@ func CriarAluno(c *gin.Context) {
 		return
     }
 
-	err = db.Create(&aluno).Error
+	aluno.Cpf = cpfcnpj.Clean(aluno.Cpf)
+	resultadoValidador := cpfcnpj.ValidateCPF(aluno.Cpf)
+    if !resultadoValidador {
+		c.JSON(400, gin.H{
+			"erro": "cpf inválido",
+		})
+		return
+    }
+
+	novoAluno := models.Aluno{
+		Nome: aluno.Nome,
+		Cpf:  aluno.Cpf,
+	}
+
+	err = db.Create(&novoAluno).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível salvar o aluno: " + err.Error(),
@@ -276,7 +282,7 @@ func CriarAluno(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, aluno)
+	c.JSON(201, novoAluno)
 }
 
 // @Summary Deleta um aluno
@@ -321,16 +327,17 @@ func DeletarAluno(c *gin.Context) {
 }
 
 // @Summary Edita um aluno
-// @Description Edita um aluno, os campos que devem ser enviados são: nome e cpf
+// @Description Edita um aluno, os campos que podem ser enviados são: nome e cpf
 // @Tags Controller Aluno
 // @Accept json
 // @Produce json
 // @Param id path int true "UniqueID do aluno"
-// @Param aluno body models.Aluno true "aluno"
+// @Param aluno body dtos.AlunoUpdateDTO true "aluno"
 // @Success 200 {object} models.Aluno
 // @Router /aluno/{id} [PUT]
 func EditarAluno(c *gin.Context) {
-	var aluno models.Aluno
+	var aluno dtos.AlunoUpdateDTO
+	var novoAluno models.Aluno
 	db := database.GetDatabase()
 	id := c.Param("id")
 	
@@ -342,7 +349,7 @@ func EditarAluno(c *gin.Context) {
 		return
 	}
 
-	err = db.First(&aluno, newid).Error
+	err = db.First(&novoAluno, newid).Error
 	if err != nil {
 		c.JSON(404, gin.H{
 			"erro": "Aluno não encontrado: " + err.Error(),
@@ -358,26 +365,21 @@ func EditarAluno(c *gin.Context) {
 		return
 	}
 
-	aluno.Cpf = cpfcnpj.Clean(aluno.Cpf)
-	resultadoValidador := cpfcnpj.ValidateCPF(aluno.Cpf)
-    if !resultadoValidador {
-		c.JSON(400, gin.H{
-			"erro": "cpf inválido",
-		})
-		return
-    }
+	if aluno.Cpf != "" {
+		aluno.Cpf = cpfcnpj.Clean(aluno.Cpf)
+		resultadoValidador := cpfcnpj.ValidateCPF(aluno.Cpf)
+		if !resultadoValidador {
+			c.JSON(400, gin.H{
+				"erro": "cpf inválido",
+			})
+			return
+		}
+	}
 
-	validate := validator.New()
+	if aluno.Nome != "" {  novoAluno.Nome = aluno.Nome  }
+	if aluno.Cpf != "" {  novoAluno.Cpf = aluno.Cpf  }
 
-    err = validate.Struct(aluno)
-    if err != nil {
-        c.JSON(400, gin.H{
-			"erro": "objeto inválido: " + err.Error(),
-		})
-		return
-    }
-
-	err = db.Save(&aluno).Error
+	err = db.Save(&novoAluno).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"erro": "não foi possível editar o aluno: " + err.Error(),
@@ -385,6 +387,6 @@ func EditarAluno(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, aluno)
+	c.JSON(200, novoAluno)
 }
 
