@@ -5,7 +5,7 @@ A aplicação foi desenvolvida em **Go** com banco de dados  **Postgres**. Ela p
 ### Run Database
 
 ```
-$ docker-compose up --build
+$ docker-compose up
 ```
 
 ### Run API 
